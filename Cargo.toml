@@ -1,0 +1,16 @@
+[package]
+name = "w-switch"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gdk4-sys = "0.9"
+gdk = { package = "gdk4", version = "0.9" }
+gtk4-sys = "0.9"
+gobject-sys = "0.21"
+gtk = { package = "gtk4", version = "0.9.7" }
+libadwaita = "0.7"
+relm4 = "0.9"
+gio = "0.21.0"
+glib = "0.21.0"
+gtk4-layer-shell = "0.5.0"

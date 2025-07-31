@@ -1,11 +1,14 @@
 mod styling;
 mod contents;
-use gtk::prelude::*;
+mod utils;
+
+use gtk::{prelude::*};
 use gtk4_layer_shell::{Edge, Layer, LayerShell};
 use styling::colors::{run_pywal, read_pywal_colors, darkest_and_lightest};
 use styling::theme::{generate_css,apply_theme};
 use contents::layout::{ generate_bar };
-use contents::panel:: { Panel };
+use contents::panel:: { Panel }; 
+
 fn main() {
     
     let app = gtk::Application::new(Some("app.wswitch"), Default::default());
@@ -49,6 +52,7 @@ fn build_window (app: &gtk::Application) {
 
     let panel = Panel::new(app);
     panel.set_hover_area(&bar);
+
     window.show();
 }
 
@@ -64,4 +68,4 @@ fn change_theme () {
     
     gtk::init().unwrap();
     apply_theme(&css);
-}
+} 

@@ -1,7 +1,7 @@
 use gtk::prelude::*;
-use gtk::{ApplicationWindow, Button, Box as GtkBox, Label};
-use gtk4_layer_shell::{self as layer_shell, Edge, Layer, LayerShell};
-use glib::clone;
+use gtk::{ApplicationWindow, Button, Label};
+use gtk4_layer_shell::{ Edge, Layer, LayerShell};
+use crate::utils::utils::get_monitor_size;
 
 pub struct Panel {
     panel: ApplicationWindow,
@@ -17,9 +17,13 @@ impl Panel {
         panel.init_layer_shell();
         panel.set_layer(Layer::Overlay);
         panel.set_exclusive_zone(-1);
-        panel.set_margin_top(50);
         panel.set_anchor(Edge::Top, true);
-        panel.set_default_size(400, 300);
+
+        let (screen_w, screen_h) = get_monitor_size();
+
+        panel.set_default_size((screen_w as f64 * 0.6) as i32, (screen_h as f64 * 0.5) as i32);
+        panel.set_margin_top((screen_h as f64 * 0.25) as i32);
+        panel.set_margin_start((screen_w as f64 * 0.2) as i32);
         panel.set_opacity(1.0);
         panel.hide();
 
@@ -57,7 +61,16 @@ impl Panel {
                 panel_clone.present();
             }
         });
-
+        
+        if let Some(display) = gtk::gdk::Display::default() {
+            let panel_clone2 = panel.clone();
+            display.monitors().connect_items_changed(move |_, _, _, _| {
+                let (w, h) = get_monitor_size();
+                panel_clone2.set_default_size((w as f64 * 0.6) as i32, (h as f64 * 0.5) as i32);
+                panel_clone2.set_margin_top((h as f64 * 0.25) as i32);
+                panel_clone2.set_margin_start((w as f64 * 0.2) as i32);
+            });
+        }
         Self { panel, arrow }
     }
 
@@ -80,8 +93,5 @@ impl Panel {
 
         bar_window.add_controller(gesture);
     }
-
-
-
             
 }
